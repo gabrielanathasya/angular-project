@@ -1,0 +1,13 @@
+.mat-icon {
+  font-size: 22px;
+  height: 22px;
+  width: 22px;
+}
+
+@media (max-width: 768px) {
+  .mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+}

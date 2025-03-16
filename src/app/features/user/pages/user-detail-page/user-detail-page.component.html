@@ -1,0 +1,157 @@
+<div class="mt-4 text-sm lg:text-base">
+  <app-button
+    id="back-button"
+    variant="secondary"
+    icon="arrow_back"
+    (click)="goBack()"
+    >Back to Users</app-button
+  >
+</div>
+<div class="container mx-auto p-4">
+  <div class="bg-white rounded-lg shadow-md h-full">
+    @if (loading()) {
+    <app-loading [diameter]="50" message="Loading users..." />
+
+    } @if (error()) {
+    <app-error-state
+      title="Error Loading User"
+      buttonText="Go Back"
+      buttonIcon="arrow_back"
+      (retryClick)="goBack()"
+    >
+    </app-error-state>
+    } @if (selectedUser() && !loading() && !error()) {
+    <div
+      id="detail-header"
+      class="py-4 px-6 lg:py-6 lg:px-10 rounded-tl-lg rounded-tr-lg grid lg:gap-2 bg-gray-600 text-white"
+    >
+      <h1 id="name" class="text-2xl lg:text-3xl">{{ selectedUser()?.name }}</h1>
+      <p id="username" class="italic text-gray-300 text-sm lg:text-base">
+        #{{ selectedUser()?.username }}
+      </p>
+    </div>
+    <div class="px-6 py-6 lg:px-10">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 flex gap-4 lg:gap-6 justify-center items-center"
+      >
+        <div id="personal-data" class="!text-sm lg:!text-base">
+          <div class="flex items-center gap-3 lg:mb-2 mb-1">
+            <mat-icon class="text-gray-300 custom-small-icon">email</mat-icon>
+            <span id="email">{{ selectedUser()?.email }}</span>
+          </div>
+          <div class="flex items-center gap-3 lg:mb-2 mb-1">
+            <mat-icon class="text-gray-300 custom-small-icon">phone</mat-icon>
+            <span id="phone">{{ selectedUser()?.phone }}</span>
+          </div>
+          <div class="flex items-center gap-3 lg:mb-2 mb-1">
+            <mat-icon class="text-gray-300 custom-small-icon"
+              >language</mat-icon
+            >
+            <a
+              id="website"
+              href="javascript:void(0)"
+              (click)="openWebsite(selectedUser()?.website ?? '')"
+              class="text-blue-600 hover:underline"
+            >
+              {{ selectedUser()?.website }}
+            </a>
+          </div>
+        </div>
+        <div class="grid lg:gap-1" id="company-data">
+          <div class="flex items-center gap-2">
+            <mat-icon color="primary" class="custom-big-icon"
+              >business</mat-icon
+            >
+            <h3 id="company-name" class="text-base lg:text-xl">
+              {{ selectedUser()?.company?.name }}
+            </h3>
+          </div>
+          <p
+            id="company-catchphrase"
+            class="italic text-gray-600 text-sm lg:text-base"
+          >
+            "{{ selectedUser()?.company?.catchPhrase }}"
+          </p>
+          <div class="px-4 py-2 bg-gray-300 rounded mt-4">
+            <p class="text-xs lg:text-sm text-gray-700">Business Strategy:</p>
+            <p id="company-bs" class="text-sm lg:text-base text-gray-900">
+              {{ selectedUser()?.company?.bs }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6" id="address-data">
+        <div class="flex items-center gap-2 mb-2">
+          <mat-icon color="primary" class="custom-big-icon"
+            >location_on</mat-icon
+          >
+          <h3 class="text-lg lg:text-xl">Address</h3>
+        </div>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6 w-full text-sm lg:text-base"
+        >
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <p class="text-[11px] lg:text-xs"><strong>Street</strong></p>
+              <p id="street" class="text-sm lg:text-base">
+                {{ selectedUser()?.address?.street }}
+              </p>
+            </div>
+            <div>
+              <p class="text-[11px] lg:text-xs"><strong>Suite</strong></p>
+              <p id="suite" class="text-sm lg:text-base">
+                {{ selectedUser()?.address?.suite }}
+              </p>
+            </div>
+            <div>
+              <p class="text-[11px] lg:text-xs"><strong>City</strong></p>
+              <p id="city" class="text-sm lg:text-base">
+                {{ selectedUser()?.address?.city }}
+              </p>
+            </div>
+            <div>
+              <p class="text-[11px] lg:text-xs"><strong>Zipcode</strong></p>
+              <p id="zipcode" class="text-sm lg:text-base">
+                {{ selectedUser()?.address?.zipcode }}
+              </p>
+            </div>
+          </div>
+          <div>
+            <div class="mb-4">
+              <p class="text-[11px] lg:text-xs">
+                <strong>Geo Location</strong>
+              </p>
+              <p id="geolocation" class="text-sm lg:text-base text-gray-800">
+                ({{ selectedUser()?.address?.geo?.lat }},
+                {{ selectedUser()?.address?.geo?.lng }})
+              </p>
+            </div>
+            <span class="text-base text-sm">
+              <app-button
+                id="view-map-button"
+                [responsiveFullWidth]="true"
+                variant="primary"
+                icon="map"
+                (click)="
+                  openGoogleMaps(
+                    selectedUser()?.address?.geo?.lat ?? '',
+                    selectedUser()?.address?.geo?.lng ?? ''
+                  )
+                "
+                >View on Google Maps</app-button
+              >
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @if (!loading() && !error() && !selectedUser()) {
+    <app-empty-state
+      icon="person_off"
+      title="User not found"
+      message="User not found."
+    />
+    }
+  </div>
+</div>
