@@ -212,7 +212,6 @@ describe('UserDetailPageComponent', () => {
     expect(detailHeaderElement).toBeFalsy();
   });
 
-  //
   it('should open website in new tab when website link is clicked', () => {
     spyOn(window, 'open');
 
