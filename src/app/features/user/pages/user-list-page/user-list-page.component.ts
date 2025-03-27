@@ -51,7 +51,7 @@ export class UserListPageComponent {
 
   searchControl = new FormControl('');
 
-  displayedColumns: string[] = ['name', 'email', 'website', 'actions'];
+  displayedColumns: string[] = ['name', 'email', 'website', 'posts', 'actions'];
 
   ngOnInit(): void {
     this.userFacade.loadUsers();
