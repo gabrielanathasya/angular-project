@@ -9,6 +9,7 @@ export class UserFacade {
   store = inject(UserStore);
 
   readonly users = this.store.users;
+  readonly posts: any = this.store.posts;
   readonly selectedUser = this.store.selectedUser;
   readonly loading = this.store.loading;
   readonly error = this.store.error;

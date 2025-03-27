@@ -17,4 +17,8 @@ export class UserService {
   getUserById(id: number): Observable<User> {
     return this.apiService.get<User>(endpoints.user.by_id(id));
   }
+
+  getUserPosts(id: number): Observable<any> {
+    return this.apiService.get<any>(endpoints.user.get_posts(id));
+  }
 }

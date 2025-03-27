@@ -44,6 +44,7 @@ export class UserListPageComponent {
   router = inject(Router);
 
   users = this.userFacade.filteredUsers;
+  posts = this.userFacade.posts;
   loading = this.userFacade.loading;
   error = this.userFacade.error;
   searchTerm = this.userFacade.searchTerm;

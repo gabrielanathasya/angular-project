@@ -10,7 +10,7 @@ import { User } from '../models/user.model';
 import { computed, inject } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap, catchError, EMPTY } from 'rxjs';
+import { pipe, switchMap, tap, catchError, EMPTY, mergeMap, from } from 'rxjs';
 
 export type UserState = {
   users: User[];
@@ -18,6 +18,7 @@ export type UserState = {
   loading: boolean;
   error: string | null;
   searchTerm: string;
+  posts: { [userId: number]: string[] };
 };
 
 export const initialState: UserState = {
@@ -26,6 +27,7 @@ export const initialState: UserState = {
   loading: false,
   error: null,
   searchTerm: '',
+  posts: {},
 };
 
 export const UserStore = signalStore(
@@ -61,9 +63,29 @@ export const UserStore = signalStore(
 
           return userService.getAllUsers().pipe(
             tap({
-              next: (users) => patchState(store, { users, loading: false }),
+              next: (users) => patchState(store, { users }),
               error: (error) =>
                 patchState(store, { error: error.message, loading: false }),
+            }),
+            switchMap((users) => from(users)),
+            mergeMap((user) => {
+              return userService.getUserPosts(user.id).pipe(
+                tap({
+                  next: (posts) =>
+                    patchState(store, {
+                      posts: {
+                        ...store.posts(),
+                        [user.id]: posts.map((post: any) => post.title),
+                      },
+                      loading: false,
+                    }),
+                  error: (error) =>
+                    patchState(store, {
+                      error: error.message,
+                      loading: false,
+                    }),
+                })
+              );
             }),
             catchError(() => EMPTY)
           );
