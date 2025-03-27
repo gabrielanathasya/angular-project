@@ -85,4 +85,8 @@ export class UserListPageComponent {
     event.stopPropagation();
     window.open(`https://${url}`, '_blank');
   }
+
+  getUserPosts(userId: number): string[] {
+    return this.userFacade.posts()[userId] || [];
+  }
 }
